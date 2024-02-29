@@ -86,8 +86,8 @@ export default function Projects() {
   return (
     <Layout>
       <div className="flex flex-col space-y-8">
-        {projects.map((project) => (
-          <Project {...project} />
+        {projects.map((project, index) => (
+          <Project key={`project-${index}`} {...project} />
         ))}
       </div>
     </Layout>
