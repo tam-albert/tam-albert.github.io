@@ -4,8 +4,8 @@
 
 :root {
   --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+  --background-start-rgb: 255, 255, 255;
+  --background-end-rgb: 214, 219, 220;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -30,4 +30,26 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+}
+
+.custom-underline {
+  display: inline-block;
+  padding-bottom: 0.5px;
+  background-position: 0 100%; /*OR bottom left*/
+  background-size: 0% 2px;
+  background-repeat: no-repeat;
+  transition: background-size 0.3s, background-position 0s 0.3s;
+}
+
+.custom-underline.active {
+  background-image: linear-gradient(#000 0 0);
+}
+
+.custom-underline.inactive {
+  background-image: linear-gradient(#d1d5db 0 0);
+}
+
+.custom-underline:hover {
+  background-position: 100% 100%;
+  background-size: 100% 2px;
 }
