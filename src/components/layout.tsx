@@ -16,7 +16,7 @@ export default function Layout({ children }: Props) {
         duration: 0.6,
         bounce: 0.15,
       }}
-      className="w-1/2 grow"
+      className="md:w-1/2 grow"
     >
       {children}
     </motion.div>

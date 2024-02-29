@@ -11,7 +11,7 @@ export default function App({ Component, pageProps }: AppProps) {
   const pathName = usePathname();
   return (
     <main
-      className={`flex min-h-screen flex-col items-center justify-between space-y-16 p-24 ${dmSans.className}`}
+      className={`flex min-h-screen flex-col items-center justify-between space-y-16 py-16 px-12 ${dmSans.className}`}
     >
       <Navbar />
       <AnimatePresence mode="wait" initial={false}>
