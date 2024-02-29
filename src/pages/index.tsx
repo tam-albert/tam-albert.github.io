@@ -1,16 +1,72 @@
-import { DM_Mono } from "next/font/google";
-
-const dmMono = DM_Mono({ subsets: ["latin"], weight: "400" });
+import Footer from "@/components/footer";
+import Layout from "@/components/layout";
 
 export default function Home() {
   return (
-    <div
-      className={`z-10 max-w-5xl w-full items-center justify-between text-sm lg:flex ${dmMono.className}`}
-    >
-      <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-        Get started by editing&nbsp;
-        <code className="font-bold">src/pages/index.tsx</code>
-      </p>
-    </div>
+    <Layout>
+      <div className="flex flex-col">
+        <div className="flex w-full flex-col space-y-4 mb-12">
+          <div>
+            Hi! I&apos;m Albert, a sophomore studying Computer Science and
+            Mathematics at MIT.
+          </div>
+          <div>
+            I&apos;m interested in building deployable machine learning systems.
+            I&apos;ve worked on retrieval-augmented generation systems at{" "}
+            <a
+              href="https://inkeep.com/"
+              className="text-blue-700 hover:text-blue-900"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Inkeep
+            </a>{" "}
+            and researched data attribution for pretrained models with{" "}
+            <a
+              href="https://madrylab.mit.edu/"
+              className="text-blue-700 hover:text-blue-900"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Aleksander Mądry&apos;s lab
+            </a>{" "}
+            at CSAIL. I also direct{" "}
+            <a
+              href="https://hackmit.org/"
+              className="text-blue-700 hover:text-blue-900"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              HackMIT
+            </a>{" "}
+            and{" "}
+            <a
+              href="https://blueprint.hackmit.org/"
+              className="text-blue-700 hover:text-blue-900"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Blueprint
+            </a>
+            , two annual hackathons at MIT.
+          </div>
+
+          <div>
+            {" "}
+            My resume is linked{" "}
+            <a
+              href="/resume.pdf"
+              className="text-blue-700 hover:text-blue-900"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              here
+            </a>
+            .
+          </div>
+        </div>
+        <Footer />
+      </div>
+    </Layout>
   );
 }

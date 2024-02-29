@@ -1,8 +1,5 @@
 import { ReactNode } from "react";
-import Navbar from "./navbar";
-import { DM_Sans } from "next/font/google";
-
-const dmSans = DM_Sans({ subsets: ["latin"] });
+import { motion } from "framer-motion";
 
 interface Props {
   children?: ReactNode;
@@ -10,11 +7,18 @@ interface Props {
 
 export default function Layout({ children }: Props) {
   return (
-    <main
-      className={`flex min-h-screen flex-col items-center justify-between p-24 ${dmSans.className}`}
+    <motion.div
+      initial={{ y: 100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      exit={{ y: 100, opacity: 0 }}
+      transition={{
+        type: "spring",
+        duration: 0.6,
+        bounce: 0.15,
+      }}
+      className="w-1/2 grow"
     >
-      <Navbar />
-      <div>{children}</div>
-    </main>
+      {children}
+    </motion.div>
   );
 }
