@@ -20,6 +20,7 @@ export default function Footer() {
     <footer className="flex space-x-2">
       {links.map(({ Icon, link }) => (
         <button
+          key={link}
           className="
             flex justify-center items-center
             border border-slate-300/50 rounded-md

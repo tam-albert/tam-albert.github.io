@@ -42,7 +42,7 @@ export default function Projects() {
             >
               large image datasets
             </a>{" "}
-            that's up to 3x smaller that improves model performance, and
+            that&apos;s up to 3x smaller that improves model performance, and
             identify mislabeled examples in training data.
           </div>
           <div>Presented at NeurIPS ATTRIB Workshop 2023.</div>

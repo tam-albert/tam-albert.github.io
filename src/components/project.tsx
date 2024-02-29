@@ -26,6 +26,7 @@ export default function Project({ title, links, text }: ProjectProps) {
           {links.map(({ Icon, link }) => (
             <a
               href={link}
+              key={link}
               target="_blank"
               rel="noopener noreferrer"
               className="p-2"

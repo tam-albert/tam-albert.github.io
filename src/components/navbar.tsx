@@ -24,6 +24,7 @@ export default function Navbar() {
           const isActive = pathName === href;
           return (
             <div
+              key="label"
               className={`${
                 isActive ? activeClassNames : "inactive"
               } custom-underline`}
