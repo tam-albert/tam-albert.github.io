@@ -1,4 +1,4 @@
-import { FaLinkedin, FaGithub, FaEnvelope } from "react-icons/fa";
+import { FaLinkedin, FaGithub, FaEnvelope, FaTwitter } from "react-icons/fa";
 
 export default function Footer() {
   const links = [
@@ -14,6 +14,10 @@ export default function Footer() {
       Icon: FaEnvelope,
       link: "mailto:altam@mit.edu",
     },
+    {
+      Icon: FaTwitter,
+      link: "https://twitter.com/tamsbert",
+    },
   ];
 
   return (
@@ -24,7 +28,7 @@ export default function Footer() {
           className="
             flex justify-center items-center
             border border-slate-300/50 rounded-md
-            transition hover:bg-slate-200/30"
+            transition hover:bg-slate-200/25"
         >
           <a
             href={link}
