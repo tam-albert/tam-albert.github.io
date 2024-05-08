@@ -5,7 +5,7 @@ export default function Home() {
   return (
     <Layout>
       <div className="flex flex-col">
-        <div className="flex w-full flex-col space-y-4 mb-12">
+        <div className="flex w-full flex-col space-y-4 mb-12 leading-relaxed">
           <div>
             Hi! I&apos;m Albert, a sophomore studying Computer Science and
             Mathematics at MIT.
