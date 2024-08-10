@@ -12,7 +12,16 @@ export default function Home() {
           </div>
           <div>
             I&apos;m interested in building deployable machine learning systems.
-            I&apos;ve worked on retrieval-augmented generation systems at{" "}
+            Currently, I&apos;m building generative audio models at{" "}
+            <a
+              href="https://phonic.co/"
+              className="text-blue-700 hover:text-blue-900"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Phonic
+            </a>
+            . I&apos;ve worked on retrieval-augmented generation systems at{" "}
             <a
               href="https://inkeep.com/"
               className="text-blue-700 hover:text-blue-900"
