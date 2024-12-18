@@ -12,7 +12,7 @@ export default function Home() {
           </div>
           <div>
             I&apos;m interested in building deployable machine learning systems.
-            Currently, I&apos;m building generative audio models at{" "}
+            In the past, I&apos;ve built generative audio models at{" "}
             <a
               href="https://phonic.co/"
               className="text-blue-700 hover:text-blue-900"
@@ -21,7 +21,7 @@ export default function Home() {
             >
               Phonic
             </a>
-            . I&apos;ve worked on retrieval-augmented generation systems at{" "}
+            , worked on retrieval-augmented generation systems at{" "}
             <a
               href="https://inkeep.com/"
               className="text-blue-700 hover:text-blue-900"
@@ -29,8 +29,8 @@ export default function Home() {
               rel="noopener noreferrer"
             >
               Inkeep
-            </a>{" "}
-            and researched data attribution for pretrained models with{" "}
+            </a>
+            , and researched data attribution for pretrained models with{" "}
             <a
               href="https://madrylab.mit.edu/"
               className="text-blue-700 hover:text-blue-900"
@@ -39,7 +39,7 @@ export default function Home() {
             >
               Aleksander Mądry&apos;s lab
             </a>{" "}
-            at CSAIL. I also direct{" "}
+            at CSAIL. I also directed{" "}
             <a
               href="https://hackmit.org/"
               className="text-blue-700 hover:text-blue-900"
