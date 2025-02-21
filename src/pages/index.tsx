@@ -12,7 +12,16 @@ export default function Home() {
           </div>
           <div>
             I&apos;m interested in building deployable machine learning systems.
-            In the past, I&apos;ve built generative audio models at{" "}
+            In the past, I&apos;ve worked with video models at{" "}
+            <a
+              href="https://pika.art/"
+              className="text-blue-700 hover:text-blue-900"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Pika
+            </a>
+            , built generative audio models at{" "}
             <a
               href="https://phonic.co/"
               className="text-blue-700 hover:text-blue-900"
