@@ -68,20 +68,6 @@ export default function Home() {
             </a>
             , two annual hackathons at MIT.
           </div>
-
-          <div>
-            {" "}
-            My resume is linked{" "}
-            <a
-              href="/resume.pdf"
-              className="text-blue-700 hover:text-blue-900"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              here
-            </a>
-            .
-          </div>
         </div>
         <Footer />
       </div>
