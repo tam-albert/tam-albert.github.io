@@ -7,12 +7,9 @@ export default function Home() {
       <div className="flex flex-col">
         <div className="flex w-full flex-col space-y-4 mb-12 leading-relaxed">
           <div>
-            Hi! I&apos;m Albert, a junior studying Computer Science and
-            Mathematics at MIT.
-          </div>
-          <div>
-            I&apos;m interested in building deployable machine learning systems.
-            Right now, I&apos;m post-training better coding agents at{" "}
+            Hi! I&apos;m Albert, a senior studying Computer Science and
+            Mathematics at MIT. Right now, I&apos;m post-training better coding
+            agents at{" "}
             <a
               href="https://www.hudsonrivertrading.com/"
               className="text-blue-700 hover:text-blue-900"
@@ -21,7 +18,11 @@ export default function Home() {
             >
               Cognition
             </a>
-            . . In the past, I&apos;ve done quantitative research at{" "}
+            .
+          </div>
+          <div>
+            I&apos;m interested in building deployable machine learning systems.
+            In the past, I&apos;ve done quantitative research at{" "}
             <a
               href="https://www.hudsonrivertrading.com/"
               className="text-blue-700 hover:text-blue-900"
@@ -66,7 +67,10 @@ export default function Home() {
             >
               Aleksander Mądry&apos;s lab
             </a>{" "}
-            at CSAIL. I also directed{" "}
+            at CSAIL.
+          </div>
+          <div>
+            I also directed{" "}
             <a
               href="https://hackmit.org/"
               className="text-blue-700 hover:text-blue-900"

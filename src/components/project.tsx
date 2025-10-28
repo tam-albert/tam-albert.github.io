@@ -16,27 +16,40 @@ export default function Project({ title, links, text }: ProjectProps) {
   return (
     <div
       className="
-        border-l-2 border-yellow-600 rounded-r-xl
+        group relative
+        border-l-4 border-yellow-500 rounded-xl
         p-4
-        bg-amber-100/80"
+        bg-gradient-to-br from-amber-50/90 to-yellow-50/80
+        shadow-md hover:shadow-lg
+        transition-all duration-300 ease-in-out
+        hover:scale-[1.01]
+        hover:border-yellow-600
+        backdrop-blur-sm"
     >
-      <div className="flex items-center">
-        <div className="text-xl font-bold">{title}</div>
-        <div className="grow flex items-center justify-end">
+      <div className="flex items-start justify-between gap-4 mb-2">
+        <div className="text-xl font-bold text-gray-900 group-hover:text-yellow-700 transition-colors">
+          {title}
+        </div>
+        <div className="flex items-center gap-1 flex-shrink-0">
           {links.map(({ Icon, link }) => (
             <a
               href={link}
               key={link}
               target="_blank"
               rel="noopener noreferrer"
-              className="p-2"
+              className="
+                p-2 rounded-lg
+                text-gray-600 hover:text-yellow-700
+                hover:bg-yellow-100
+                transition-all duration-200
+                transform hover:scale-110"
             >
-              <Icon />
+              <Icon className="w-5 h-5" />
             </a>
           ))}
         </div>
       </div>
-      <div>{text}</div>
+      <div className="text-gray-700 leading-relaxed">{text}</div>
     </div>
   );
 }

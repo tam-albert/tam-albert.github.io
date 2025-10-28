@@ -4,6 +4,7 @@ import { Space_Mono } from "next/font/google";
 import { FaFileAlt, FaGithub } from "react-icons/fa";
 import { FaCircleInfo } from "react-icons/fa6";
 import { SiDevpost } from "react-icons/si";
+import { motion } from "framer-motion";
 
 const mono = Space_Mono({ subsets: ["latin"], weight: "700" });
 
@@ -67,29 +68,46 @@ export default function Projects() {
       ],
       text: "A collaborative journaling app you can use to compile memories with your friends, supporting text, images, and audio. Built for web.lab 2023.",
     },
-    // {
-    //   title: "publication",
-    //   //   link: "https://google.com",
-    //   text: "some text",
-    // },
-    // {
-    //   title: "sakhi",
-    //   //   link: "https://google.com",
-    //   text: "some text",
-    // },
-    // {
-    //   title: "stitchit",
-    //   //   link: "https://github.com/tam-albert/stitchit",
-    //   text: "some text",
-    // },
   ];
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.15,
+      },
+    },
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      transition: {
+        duration: 0.5,
+        ease: "easeOut",
+      },
+    },
+  };
+
   return (
     <Layout>
-      <div className="flex flex-col space-y-8">
-        {projects.map((project, index) => (
-          <Project key={`project-${index}`} {...project} />
-        ))}
+      <div className="mb-6">
+        A collection of things I&apos;ve built in the past.
       </div>
+      <motion.div
+        variants={containerVariants}
+        initial="hidden"
+        animate="visible"
+        className="flex flex-col space-y-6"
+      >
+        {projects.map((project, index) => (
+          <motion.div key={`project-${index}`} variants={itemVariants}>
+            <Project {...project} />
+          </motion.div>
+        ))}
+      </motion.div>
     </Layout>
   );
 }

@@ -1,4 +1,5 @@
-import { FaLinkedin, FaGithub, FaEnvelope, FaTwitter } from "react-icons/fa";
+import { FaLinkedin, FaGithub, FaEnvelope } from "react-icons/fa";
+import { FaXTwitter } from "react-icons/fa6";
 
 export default function Footer() {
   const links = [
@@ -15,7 +16,7 @@ export default function Footer() {
       link: "mailto:altam@mit.edu",
     },
     {
-      Icon: FaTwitter,
+      Icon: FaXTwitter,
       link: "https://twitter.com/tamsbert",
     },
   ];
