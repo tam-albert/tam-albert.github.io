@@ -12,7 +12,25 @@ export default function Home() {
           </div>
           <div>
             I&apos;m interested in building deployable machine learning systems.
-            In the past, I&apos;ve worked with video models at{" "}
+            Right now, I&apos;m post-training better coding agents at{" "}
+            <a
+              href="https://www.hudsonrivertrading.com/"
+              className="text-blue-700 hover:text-blue-900"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Cognition
+            </a>
+            . . In the past, I&apos;ve done quantitative research at{" "}
+            <a
+              href="https://www.hudsonrivertrading.com/"
+              className="text-blue-700 hover:text-blue-900"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              HRT
+            </a>
+            , worked with video models at{" "}
             <a
               href="https://pika.art/"
               className="text-blue-700 hover:text-blue-900"
