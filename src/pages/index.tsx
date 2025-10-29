@@ -8,8 +8,16 @@ export default function Home() {
         <div className="flex w-full flex-col space-y-4 mb-12 leading-relaxed">
           <div>
             Hi! I&apos;m Albert, a senior studying Computer Science and
-            Mathematics at MIT. Right now, I&apos;m post-training better coding
-            agents at{" "}
+            Mathematics at MIT. Right now, I&apos;m post-training{" "}
+            <a
+              href="https://cognition.ai/blog/swe-grep"
+              className="text-blue-700 hover:text-blue-900"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              better coding agents
+            </a>{" "}
+            at{" "}
             <a
               href="https://www.hudsonrivertrading.com/"
               className="text-blue-700 hover:text-blue-900"
@@ -31,7 +39,7 @@ export default function Home() {
             >
               HRT
             </a>
-            , worked with video models at{" "}
+            , tinkered with video models at{" "}
             <a
               href="https://pika.art/"
               className="text-blue-700 hover:text-blue-900"
