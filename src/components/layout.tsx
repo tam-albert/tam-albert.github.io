@@ -13,8 +13,8 @@ export default function Layout({ children }: Props) {
       exit={{ y: 100, opacity: 0 }}
       transition={{
         type: "spring",
-        duration: 0.6,
-        bounce: 0.15,
+        duration: 0.3,
+        bounce: 0.05,
       }}
       className="md:w-1/2 grow"
     >
