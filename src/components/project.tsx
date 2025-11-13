@@ -20,7 +20,7 @@ export default function Project({ title, links, text }: ProjectProps) {
         border-l-4 border-yellow-500 rounded-xl
         p-4
         bg-gradient-to-br from-amber-50/90 to-yellow-50/80
-        shadow-md hover:shadow-lg
+        shadow-sm hover:shadow-md
         transition-all duration-300 ease-in-out
         hover:scale-[1.01]
         hover:border-yellow-600

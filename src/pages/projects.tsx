@@ -11,14 +11,6 @@ const mono = Space_Mono({ subsets: ["latin"], weight: "700" });
 export default function Projects() {
   const projects = [
     {
-      title: <span className={`${mono.className}`}>zyzx</span>,
-      links: [
-        { Icon: FaGithub, link: "https://github.com/tam-albert/zyzx" },
-        { Icon: FaCircleInfo, link: "https://zyzx.azliu.cc/" },
-      ],
-      text: "A natural language shell built in Zig, using a custom Mixtral 8x7B model fine-tuned on bash commands. Built at TreeHacks 2024.",
-    },
-    {
       title: "Data Attribution for Segmentation Models",
       links: [
         { Icon: FaFileAlt, link: "https://openreview.net/forum?id=13VkFDTKHH" },
@@ -49,6 +41,86 @@ export default function Projects() {
           <div>Presented at NeurIPS ATTRIB Workshop 2023.</div>
         </>
       ),
+    },
+    {
+      title:
+        "Affine Transformations for Outlier-Resilient Post-Training Quantization on Diffusion Transformers",
+      links: [
+        {
+          Icon: FaGithub,
+          link: "https://github.com/tam-albert/fq-diffusion/tree/main",
+        },
+      ],
+      text: (
+        <>
+          Final project for{" "}
+          <a
+            href="https://hanlab.mit.edu/courses/2024-fall-65940"
+            className="text-blue-700 hover:text-blue-900"
+            target="_blank"
+          >
+            6.5940 (Efficient Deep Learning Computing)
+          </a>
+          , Fall 2024 at MIT. We adapted{" "}
+          <a
+            href="https://arxiv.org/abs/2410.09426"
+            className="text-blue-700 hover:text-blue-900"
+            target="_blank"
+          >
+            FlatQuant
+          </a>
+          , a post-training quantization method for LLMs which learns affine
+          transformations to mitigate outliers weights and activations, for
+          diffusion transformers. We achieved comparable results on key image
+          quality metrics (FID, CLIP score, LPIPS) when quantizing from fp16 to
+          w8a8/w6a6.
+        </>
+      ),
+    },
+    {
+      title: "Guidance for Diffusion Language Models",
+      links: [{ Icon: FaCircleInfo, link: "/diffusion-guidance/index.html" }],
+      text: (
+        <>
+          Final project for{" "}
+          <a
+            href="https://phillipi.github.io/6.7960/"
+            className="text-blue-700 hover:text-blue-900"
+            target="_blank"
+          >
+            6.7960 (Deep Learning)
+          </a>
+          , Fall 2024 at MIT. We explored training-free guidance methods for
+          discrete diffusion language models, adapting ideas from both diffusion
+          (
+          <a
+            href="https://arxiv.org/abs/2406.02507"
+            className="text-blue-700 hover:text-blue-900"
+            target="_blank"
+          >
+            autoguidance
+          </a>
+          ) and language modeling (
+          <a
+            href="https://arxiv.org/abs/2210.15097"
+            className="text-blue-700 hover:text-blue-900"
+            target="_blank"
+          >
+            contrastive decoding
+          </a>
+          ) to improve generation quality. We achieved improvements in
+          perplexity over baseline diffusion LMs on WikiText2, without any
+          additional training.
+        </>
+      ),
+    },
+    {
+      title: <span className={`${mono.className}`}>zyzx</span>,
+      links: [
+        { Icon: FaGithub, link: "https://github.com/tam-albert/zyzx" },
+        { Icon: FaCircleInfo, link: "https://zyzx.azliu.cc/" },
+      ],
+      text: "A natural language shell built in Zig, using a custom Mixtral 8x7B model fine-tuned on bash commands. Built at TreeHacks 2024.",
     },
     {
       title: "Sakhi",
@@ -93,9 +165,6 @@ export default function Projects() {
 
   return (
     <Layout>
-      <div className="mb-6">
-        A collection of things I&apos;ve built in the past.
-      </div>
       <motion.div
         variants={containerVariants}
         initial="hidden"

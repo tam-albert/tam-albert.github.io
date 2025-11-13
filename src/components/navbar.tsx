@@ -11,10 +11,6 @@ export default function Navbar() {
       href: "/projects",
       label: "projects",
     },
-    {
-      href: "/blog",
-      label: "blog",
-    },
   ];
 
   const activeClassNames = "text-black active";

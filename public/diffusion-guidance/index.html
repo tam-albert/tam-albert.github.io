@@ -1,0 +1,751 @@
+<!DOCTYPE html>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    // Create TOC container
+    const toc = document.createElement("nav");
+    toc.id = "table-of-contents";
+    toc.innerHTML = "<h2>Table of Contents</h2>";
+    const tocList = document.createElement("ul");
+    toc.appendChild(tocList);
+
+    // Get all h1-h6 elements
+    const headers = document.querySelectorAll("h1, h2, h3, h4, h5, h6");
+
+    headers.forEach((header) => {
+      const li = document.createElement("li");
+      const a = document.createElement("a");
+      a.textContent = header.textContent;
+      a.href = "#" + header.id;
+      li.style.marginLeft = (parseInt(header.tagName[1]) - 1) * 20 + "px";
+      li.appendChild(a);
+      tocList.appendChild(li);
+    });
+
+    // Insert TOC after authors
+    const authors = document.querySelector("#authors");
+    if (authors) {
+      authors.parentNode.insertBefore(toc, authors.nextSibling);
+    }
+  });
+</script>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang="">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="generator" content="pandoc" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=yes"
+    />
+    <title>Guidance for Diffusion Language Models</title>
+    <link rel="stylesheet" href="https://use.typekit.net/onx5jmr.css" />
+    <link rel="stylesheet" href="style.css" />
+    <script
+      type="text/javascript"
+      id="MathJax-script"
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js"
+    ></script>
+    <script src="scripts/tex-chtml-full.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <h1 id="guidance-for-diffusion-language-models">
+      Guidance for Diffusion Language Models
+    </h1>
+
+    <div class="authors" id="authors">
+      <p>Sumedh Shenoy, Albert Tam</p>
+    </div>
+
+    <h1 id="introduction">Introduction</h1>
+    <p>
+      Diffusion-based approaches have excelled in domains such as image
+      <a href="#cite-1" class="citation">[1]</a>, video
+      <a href="#cite-2" class="citation">[2]</a>, and audio
+      <a href="#cite-3" class="citation">[3]</a>. They're noted for their
+      ability to <em>controllably</em> generate realistic, high-fidelity
+      samples. However, in language modeling, the predominant approaches are all
+      autoregressive in nature. While currently state-of-the-art, autoregressive
+      (AR) approaches suffer from some problems:
+    </p>
+    <ul>
+      <li>
+        AR models are naturally constrained to sample tokens sequentially, which
+        is slow for long sequences.
+      </li>
+      <li>
+        Sampling directly from the conditional distribution often leads to
+        degraded generation; instead, annealing techniques, like nucleus
+        sampling <a href="#cite-4" class="citation">[4]</a>, are required to
+        achieve maximum performance.
+      </li>
+    </ul>
+    <p>
+      There have been several works attempting to use diffusion-based approaches
+      in the language modeling space, but there still exists a performance gap
+      between diffusion and AR language models, in terms of raw log-likelihoods.
+      This gap has narrowed over the past few years, but at best, diffusion
+      language models are competitive with older AR models like GPT-2
+      <a href="#cite-5" class="citation">[5]</a>
+      <a href="#cite-6" class="citation">[6]</a> on <em>certain tasks</em>.
+      There still exists a significant gap between the best diffusion language
+      models and the best AR models on metrics like generative perplexity, even
+      when controlling for model parameter count and training tokens, which
+      suggests weaknesses in modeling capabilities alone.
+    </p>
+    <p>
+      How can we (plainly) get better at modeling? Besides scaling and training
+      on better data, much work has been done to improve generation quality
+      across both the AR language modeling and diffusion spaces. In particular,
+      we focus primarily on two techniques:
+    </p>
+    <ul>
+      <li>
+        <em>Contrastive decoding</em>, proposed by Li et al. in 2023
+        <a href="#cite-7" class="citation">[7]</a>. Given a language model (LM),
+        they use an “amateur” LM to guide it away from known failure modes of AR
+        models and improve the quality of its generations.
+      </li>
+      <li>
+        <em>Autoguidance</em>, proposed by Karras et al. in 2024
+        <a href="#cite-8" class="citation">[8]</a>. They improve the quality of
+        generations from a diffusion model by guiding it with an inferior
+        version of itself (e.g. an earlier checkpoint), which can better model
+        the original data distribution.
+      </li>
+    </ul>
+    <p>
+      These similar techniques have both shown promise for generating better
+      samples in their respective domains.
+    </p>
+    <p>
+      In this article, we’ll investigate the connections between these two
+      perspectives on guidance. We explore their applications to diffusion
+      language models, and show significant improvements in unconditional
+      generation without any additional training. In particular, we’ll discuss:
+    </p>
+    <ul>
+      <li>
+        how to train and sample from diffusion models over discrete domains,
+        following the approach in Lou et al.
+        <a href="#cite-5" class="citation">[5]</a>
+      </li>
+      <li>
+        how contrastive decoding and autoguidance work, and the connections
+        between the two
+      </li>
+      <li>
+        our approaches for adapting autoguidance to discrete diffusion models
+      </li>
+      <li>results showing that autoguidance improves generation quality.</li>
+    </ul>
+    <h1 id="discrete-diffusion-modeling">
+      Discrete diffusion modeling with SEDD
+    </h1>
+    <p>
+      Diffusion modeling, in its classical formulations
+      <a href="#cite-1" class="citation">[1,</a>
+      <a href="#cite-9" class="citation">9,</a>
+      <a href="#cite-10" class="citation">10]</a>, operates over
+      <em>continuous</em> domains, where we can define the noising and denoising
+      processes continuously. Adapting this to work over a discrete domain, like
+      text, is nontrivial. There are multiple approaches
+      <a href="#cite-6" class="citation">[6,</a>
+      <a href="#cite-11" class="citation">11]</a>, but we focus on Lou et al.’s
+      approach, which they call Score Entropy Discrete Diffusion (SEDD). We
+      summarize their approach here, and a more detailed treatment is given in
+      their paper.
+    </p>
+    <h2 id="learning-discrete-distributions-by-score-entropy">
+      Learning discrete distributions by “score entropy”
+    </h2>
+    <p>
+      SEDD approaches the modeling task from the perspective of
+      <em>score matching</em> <a href="#cite-12" class="citation">[12]</a>,
+      which approximates a continuous distribution
+      <span class="math inline">\(p\)</span> by learning the
+      <em>score function</em>
+      <span class="math inline">\(\nabla_x \log p(x)\)</span>. In a discrete
+      space, since gradients become finite differences, the equivalent of the
+      score function can be written as
+      <span class="math display"
+        >\[\frac{p(y) - p(x)}{p(x)} = \frac{p(y)}{p(x)} - 1.\]</span
+      >
+      The quantity <span class="math inline">\(p(y)/p(x)\),</span> which is a
+      probability ratio between two sentences, is defined as the
+      <em>concrete score</em>, and can be approximated by a neural network
+      <span class="math inline">\(s_\theta(x)_y\)</span>.
+    </p>
+    <p>
+      To train this neural network
+      <span class="math inline">\(s_\theta(x)_y \approx p(y)/p(x)\),</span> SEDD
+      adapts the cross-entropy loss
+      <span class="math display"
+        >\[\mathbb{E}_{y\sim p}[-\log p_\theta(y)] = -\sum_y p(y)\log
+        p_\theta(y)\]</span
+      >
+      and defines a new loss function, called the
+      <strong>score entropy:</strong>
+      <span class="math display"
+        >\[\sum_{y} \left(s_\theta(x)_y - \frac{p(y)}{p(x)}\log
+        s_\theta(x)_y\right)\]</span
+      >
+      (up to a normalizing constant). While this loss is intractable (it
+      requires regressing to the scores
+      <span class="math inline">\(p(y)/p(x),\)</span> which are unknown to us),
+      SEDD, like the original score matching literature, treats
+      <span class="math inline">\(y\)</span> and
+      <span class="math inline">\(x\)</span> as samples from the denoised
+      distributions of some base distribution
+      <span class="math inline">\(p_0\),</span> and instead uses the
+      <strong>denoising score entropy</strong> loss
+      <span class="math display"
+        >\[\mathop{\mathbb{E}}_{\substack{x_0\sim p_0 \\ x\sim p(\cdot\mid
+        x_0)}} \left[\sum_{y\neq x} \left(s_\theta(x)_y - \frac{p(y\mid
+        x_0)}{p(x\mid x_0)}\log s_\theta(x)_y \right)\right].\]</span
+      >
+    </p>
+    <h2 id="sampling-with-sedd">Sampling with SEDD</h2>
+    <p>
+      How can we use the learned scores to actually generate samples? Much like
+      the original formulation of diffusion, SEDD defines a forward and reverse
+      diffusion process, which give rise to a family of distributions
+      <span class="math inline">\(p_t\)</span> for
+      <span class="math inline">\(t\in\mathbb{R}^{\geq0}\)</span> (where
+      <span class="math inline">\(p_0 \approx p_{\text{data}}\)</span>). Since
+      our domain is discrete, the process is defined in terms of
+      <strong>diffusion matrices</strong>
+      <span class="math inline">\(Q_t\)</span> such that
+      <span class="math display">\[dp_t/dt=Q_tp_t.\]</span> To ensure that there
+      is a stationary distribution as
+      <span class="math inline">\(t\rightarrow\infty\),</span> the matrices
+      <span class="math inline">\(Q_t\)</span> are constrained to be within a
+      scalar factor of some base matrix
+      <span class="math inline">\(Q\),</span> such that
+      <span class="math inline">\(Q(t)=\sigma(t)Q\)</span> for some
+      <span class="math inline">\(\sigma(t)\in\mathbb{R}.\)</span>
+    </p>
+    <p>
+      The reverse diffusion process can be derived as
+      <span class="math display">\[dp_{T-t}/dt = \bar{Q}_{T-t}p_{T-t},\]</span>
+      where
+      <span class="math inline"
+        >\(\bar{Q}_t(y,x)=\frac{p_t(y)}{p_t(x)}Q_t(x,y).\)</span
+      >
+      This scaling factor, which gives us the reverse process, is precisely the
+      scores that we learn using the denoising score entropy loss
+      <span class="math inline">\(\mathcal{L}_{\text{DSE}}\)</span>!
+    </p>
+    <p>
+      In particular, we could simply use Euler’s method as an ODE solver to
+      approximate the reverse process. For a given step size
+      <span class="math inline">\(\Delta t\),</span> we have
+      <span class="math display"
+        >\[p(x_{t+\Delta t} = y\mid x_t=x) = \delta_{xy} +
+        \frac{p_t(y)}{p_t(x)}Q_t(x,y)\Delta t + O(\Delta t)^2,\]</span
+      >
+      where <span class="math inline">\(\delta\)</span> is the Kronecker delta.
+    </p>
+    <h2 id="scaling-sedd">Scaling SEDD</h2>
+    <p>
+      While simulating the reverse process works in theory, modeling scores and
+      transitions in practice becomes difficult. Language may be a discrete
+      space, but it is a <em>large</em> discrete space! For example, GPT-2’s
+      vocabulary size is 50,257; newer models, like GPT-4 and LLaMa-3, have even
+      larger vocabulary sizes upwards of 100K tokens. The number of
+      <em>sequences</em> that can be made of these tokens is exponential in the
+      vocabulary size. To address this, SEDD makes two key simplifications.
+    </p>
+    <p>
+      The <strong>first simplification</strong> is that approximating scores for
+      <em>all</em> possible pairs of sequences
+      <span class="math inline">\((x_1\ldots X_L,y_1\ldots y_L)\)</span> is
+      intractable. SEDD simplifies this by only modeling the scores between
+      sequences that differ by only one token, and ignoring the others. Letting
+      <span class="math inline">\(L\)</span> be the sequence length and
+      <span class="math inline">\(N\)</span> the vocabulary size, this cuts the
+      number of scores <span class="math inline">\(s_\theta(x)\)</span> we need
+      to calculate for a given <span class="math inline">\(x\)</span> from
+      <span class="math inline">\(N^L\)</span> (all possible sequences) to
+      <span class="math inline">\(LN\)</span> (all sequences that differ by only
+      one token): a tractable size. We factorize the forward transition in terms
+      of these per-token transitions.
+    </p>
+    <figure>
+      <img src="assets/sedd_scores.png" />
+      <figcaption class="caption">
+        SEDD only models the scores for sequences that are one token apart.
+      </figcaption>
+    </figure>
+    <p>
+      Equivalently, instead of considering an entire diffusion matrix
+      <span class="math inline">\(Q_t(x, y)\)</span> (with
+      <span class="math inline">\(N^{2L}\)</span> entries!), we only need to
+      consider a diffusion matrix
+      <span class="math inline">\(Q_t^{\text{tok}}\)</span> that perturbs tokens
+      independently, such that it has size
+      <span class="math inline">\(N^2.\)</span>
+    </p>
+    <p>
+      Still, this matrix is too large to materialize efficiently for large
+      vocabulary sizes at the 100K scale; the
+      <strong>second simplification</strong> constrains
+      <span class="math inline">\(Q\)</span> to be within a special structure.
+      In particular, we consider the version of SEDD that uses the transition
+      matrix
+      <span class="math display"
+        >\[Q^{\text{absorb}} = \begin{bmatrix} -1 &amp; 0 &amp; \cdots &amp; 0
+        &amp; 0 \\ 0 &amp; -1 &amp; \cdots &amp; 0 &amp; 0 \\ \vdots &amp;
+        \vdots &amp; \ddots &amp; \vdots &amp; \vdots \\ 0 &amp; 0 &amp; \cdots
+        &amp; -1 &amp; 0 \\ 1 &amp; 1 &amp; \cdots &amp; 1 &amp; 0
+        \end{bmatrix},\]</span
+      >
+      where the <span class="math inline">\(1\)</span>s correspond to the
+      transitions to a special absorbing MASK token. We note that this is
+      similar to the treatment given in Sahoo et al.
+      <a href="#cite-6" class="citation">[6]</a>.
+    </p>
+    <figure>
+      <img src="assets/masked_diffusion.png" />
+      <figcaption class="caption">
+        An example of the forward diffusion process, when using the "absorbing"
+        formulation of the diffusion matrix.
+      </figcaption>
+    </figure>
+    <p>
+      <strong>A note on sampling:</strong> It turns out that reverse sampling
+      using Euler’s method is not in fact the optimal way to denoise. There
+      exists an analytically optimal denoiser—we defer to SEDD for the full
+      treatment.
+    </p>
+    <p>
+      Essentially, we’ve defined a forward and reverse process and found a way
+      to approximate the reverse process—all the components needed for a
+      generative model!
+    </p>
+    <p>
+      Lou et al. show that, with this approach, SEDD outperforms GPT-2 in
+      unconditional perplexity (which they indirectly model using an ELBO) on
+      most datasets, and outperforms all existing diffusion language models at
+      the time. The question remains: <em>can we do better?</em>
+    </p>
+    <h1 id="guidance-a-hack-to-boost-your-generation-quality">
+      Guidance: a "hack" for boosting generation quality
+    </h1>
+    <p>
+      To begin thinking about improving the capabilities of SEDD, we draw
+      inspiration from two techniques in the literature: contrastive decoding
+      and autoguidance. Both are training-free techniques that can improve the
+      quality of generated samples.
+    </p>
+    <h2 id="contrastive-decoding-li-et-al.-2023">
+      Contrastive decoding (Li et al., 2023)
+    </h2>
+    <p>
+      Contrastive decoding aims to address issues that are common to AR language
+      models of all sizes, such as repetition, incoherence, topic drift, and
+      self-contradiction. Based on the observation that smaller, lower-quality
+      models make these mistakes more often, the authors propose an alternative
+      decoding objective based on the difference between the logprobs from by an
+      “expert” model and the logprobs from an “amateur model.” To ensure that we
+      don’t consider too many implausible tokens, they add a plausibility
+      constraint, only considering tokens within some set
+      <span class="math inline">\(\mathcal{V}_{\text{head}}\),</span> which
+      consists of tokens whose probabilities are within some (hyperparameter)
+      factor <span class="math inline">\(\alpha\)</span> of the
+      maximum-probability token.
+    </p>
+    <p>
+      Letting <span class="math inline">\(p_{\text{AMA}}\)</span> and
+      <span class="math inline">\(p_{\text{EXP}}\)</span> be the probability
+      distributions of the expert and amateur models respectively, we can
+      convert this into a score for each token
+    </p>
+    <p>
+      <span class="math display"
+        >\[s(x_i;x_{&lt;i}) = \begin{cases} \log \frac{p_{\text{EXP}}(x_i\mid
+        x_{&lt;i})}{p_{\text{AMA}}(x_i\mid x_{&lt;i})}, &amp; \text{if
+        $x_i\in\mathcal{V}_{\text{head}}(x_{&lt;i})$}, \\ -\infty, &amp;
+        \text{otherwise} \end{cases}\]</span
+      >
+    </p>
+    <p>The authors use beam search to sample using these scores.</p>
+    <h2 id="autoguidance-karras-et-al.-2024">
+      Autoguidance (Karras et al., 2024)
+    </h2>
+    <p>
+      Karras et al. employ a similar approach for improving the generations of
+      diffusion models. They base their technique off of
+      <em>classifier-free guidance</em> (CFG)
+      <a href="#cite-13" class="citation">[13]</a>, a popular technique for
+      improving prompt adherence and image quality in <em>conditional</em>
+      text-to-image generation. For a vanilla diffusion model
+      <span class="math inline">\(\theta\),</span> recall that the score of an
+      example <span class="math inline">\(x\)</span> conditioned on class
+      <span class="math inline">\(c\)</span> is
+      <span class="math inline">\(\nabla_x \log p_\theta(x\mid c).\)</span> In
+      CFG, for a given guidance scale
+      <span class="math inline">\(\alpha \in \mathbb{R}\),</span> this score is
+      replaced with a new score
+      <span class="math display"
+        >\[\nabla_x \log p_\theta(x\mid c) + \alpha(\nabla_x \log p_\theta(x\mid
+        c) - \nabla_x \log p_\theta(x)),\]</span
+      >
+      where <span class="math inline">\(\nabla_x\log p_\theta(x)\)</span> is the
+      score of the unconditional model.
+    </p>
+    <p>
+      CFG was originally used as a technique to improve adherence to
+      conditioning information, but has also been found to improve image quality
+      (and as such is present in almost every text-to-image pipeline nowadays).
+      Karras et al. hypothesize that this happens because:
+    </p>
+    <ul>
+      <li>
+        the score matching objective leads to a large number of likely samples
+        outside the main distribution, leading to poor-quality samples, and
+      </li>
+      <li>
+        the unconditional model and conditional model will share similar
+        outliers, so subtracting the scores will push the gradient toward the
+        high-quality region of the distribution.
+      </li>
+    </ul>
+    <figure>
+      <img src="assets/cfg.png" />
+      <figcaption class="caption">
+        Samples from a 128x128 diffusion model trained on ImageNet. Left is
+        examples without guidance, right is with guidance of
+        <span class="math inline">\(\alpha=3.0\)</span>. Figure from Ho &amp;
+        Salimans.
+        <a href="#cite-13" class="citation">[13]</a>
+      </figcaption>
+    </figure>
+    <p>
+      While CFG is effective, it can also produce unnatural-looking,
+      oversaturated images <a href="#cite-13" class="citation">[13]</a>. Karras
+      et al. attribute this to the fact that CFG distorts sampling trajectories,
+      as the CFG score is no longer a valid diffusion and will not lead to a
+      valid density.
+    </p>
+    <p>
+      They propose disentangling CFG’s effects of improved image quality and
+      improved conditioning adherence by using <em>autoguidance:</em> instead of
+      subtracting the scores of an unconditional model, they subtract the scores
+      of an inferior model trained on the same task and data distribution. In
+      practice, this is carried out by subtracting the score of either an
+      earlier training checkpoint or a model trained on corrupted/degraded data.
+    </p>
+    <p>
+      This method has the added bonus of being applicable to unconditional
+      generation, on which they achieve large improvements on Frechet inception
+      distance (FID) and other relevant metrics.
+    </p>
+    <h2 id="similarities">Similarities</h2>
+    <p>
+      CD and autoguidance, despite appearing very different, fit into a broader
+      framework of improving generative models. Both techniques attempt to
+      address failure modes that are inherent to their respective modeling
+      techniques: repetition and incoherence for AR models, and
+      out-of-distribution outliers for diffusion. They both exploit the fact
+      that inferior models suffer from these failure modes more often than
+      better models, and use the difference between their predictions to push
+      the model toward a more high-quality region of the data distribution. CD
+      uses the difference between logprobs; autoguidance uses the difference
+      between scores.
+    </p>
+    <h1 id="proposed-methods">Proposed Methods</h1>
+    <p>
+      Our primary proposed method is to translate this central idea—of using
+      information from a worse model to guide generation with a better model—to
+      discrete diffusion models. It is an open question whether
+      <em>how</em> (and if) it translates to discrete diffusion.
+    </p>
+    <p>
+      We propose two new autoguidance strategies that follow this paradigm:
+      <strong>concrete score-based autoguidance</strong> and
+      <strong>sampling-based autoguidance</strong>.
+    </p>
+
+    <p>
+      In <strong>concrete score-based autoguidance</strong> (CSA), inspired by
+      Karras et al. <a href="#cite-8" class="citation">[8]</a>, we directly
+      modify the concrete scores proposed in Lou et al.
+      <a href="#cite-5" class="citation">[5]</a> as follows: if
+      <span class="math inline"
+        >\(s^{\text{large}}_{\theta}, s^{\text{small}}_{\theta}\)</span
+      >
+      are the concrete scores of the large and small model, respectively, we
+      take
+      <span class="math display"
+        >\[s^{\text{CSA}}_{\theta}(x_t, t) = s^{\text{large}}_{\theta}(x_t, t) +
+        \alpha\left(s^{\text{large}}_{\theta}(x_t, t) -
+        s^{\text{small}}_{\theta}(x_t, t)\right).\]</span
+      >
+      Then, our denoising process results in a token level transition of
+      sampling from the probability distribution of
+      <span class="math display"
+        >\[\delta_{x^i_t}(x^i_{t - \Delta t}) + \Delta t
+        Q_{t}^{\text{tok}}(x_t^i, x^i_{t - \Delta
+        t})s^{\text{CSA}}_{\theta}(x_t, t),\]</span
+      >
+      following Lou et al. <a href="#cite-5" class="citation">[5]</a>.
+    </p>
+    <p>
+      On the other hand, in <strong>sampling-based autoguidance</strong> (SBA),
+      inspired by contrastive decoding, we utilize the <em>discrete</em> nature
+      of the problem. In our standard setup, the large model samples from the
+      probability distribution of
+      <span class="math display"
+        >\[p_{\text{large}}(x) = \delta_{x^i_t}(x^i_{t - \Delta t}) + \Delta t
+        Q_{t}^{\text{tok}}(x_t^i, x^i_{t - \Delta
+        t})s^{\text{large}}_{\theta}(x_t, t),\]</span
+      >
+      and the small samples from
+      <span class="math display"
+        >\[p_{\text{small}}(x) = \delta_{x^i_t}(x^i_{t - \Delta t}) + \Delta t
+        Q_{t}^{\text{tok}}(x_t^i, x^i_{t - \Delta
+        t})s^{\text{small}}_{\theta}(x_t, t)\]</span
+      >
+    </p>
+    <p>
+      Now, in the spirit of contrastive decoding, we take a sample from the
+      distribution
+      <span class="math display"
+        >\[\sigma(\log p_{\text{large}} - \log p_{\text{small}}).\]</span
+      >
+      Notably, contrastive decoding takes the <em>maximum</em>, rather than
+      sampling; however, since we are working in the denoising setting, sampling
+      by maximum probability would lead to nonsensical results. We explore the
+      performance of these two autoguidance formulations for discrete diffusion
+      in the following section.
+    </p>
+    <h1 id="experiments">Experiments</h1>
+    <p>
+      To evaluate the performance of our proposed autoguidance mechanism for
+      discrete diffusion models, we focus on the
+      <em>generative perplexity</em> scores of outputs generated by our
+      diffusion model on a ground truth dataset (like WikiText2).
+    </p>
+    <p>
+      Since SEDD does not directly model the likelihood of each sample, we use
+      the ELBO as an upper bound for perplexity, as derived in Lou et al.
+      <a href="#cite-5" class="citation">[5]</a>. For a given sample
+      <span class="math inline">\(x_0\),</span> the ELBO is given by
+      <span class="math display"
+        >\[\begin{align}-\log p_0^\theta(x_0) &amp;\leq D_{KL}(p_{T\mid
+        0}(\cdot\mid x_0)\Vert p_{base}) \\ &amp;+ \int_0^T \mathbb{E}_{x_t\sim
+        p_{t\mid0}(\cdot\mid x_0)} \sum_{y\neq x_t}
+        Q_t(x_t,y)\left(s_\theta(x_t,t)_y-\frac{p_{t\mid 0}(y\mid
+        x_0)}{p_{t\mid0}(x_t\mid x_0)}\log s_\theta(x_t,t)_y\right)\,
+        dt\end{align}\]</span
+      >
+    </p>
+    <p>
+      We attempted to implement this to run evaluations for our proposed
+      autoguidance method. However, we found large variability in our ELBO
+      depending on the number of samples we computed, and evaluating enough
+      samples to obtain a non-noisy estimate was computationally infeasible.
+    </p>
+    <p>
+      Our primary evaluation metric is one used in Lou et al.
+      <a href="#cite-5" class="citation">[5]</a>: using an autoregressive model
+      that <em>does</em> produce probability logits to evaluate the likelihoods
+      of generated text, allowing us to directly measure the perplexity of model
+      outputs. For our evaluation model, we use GPT2-XL, identically to Lou et
+      al.<a href="#cite-5" class="citation">[5]</a>.
+    </p>
+    <p>
+      Now, with this evaluation metric, we performed the following experiments:
+      (a) analyzing the performance of our two proposed autoguidance strategies,
+      (b) the impact of hyperparameters on our proposed autoguidance methods,
+      and (c) comparing the performance of our best autoguidance method (with
+      its corresponding hyperparameters) to the small and medium base discrete
+      diffusion models open sourced by Lou et al.
+      <a href="#cite-5" class="citation">[5]</a>. In all of our experiments,
+      unless otherwise specified, we sample with 64 timesteps, generating
+      sequences of 256 tokens.
+    </p>
+    <h2 id="performance-against-base-models">
+      Autoguidance improves performance against base models
+    </h2>
+    <p>
+      To benchmark performance against the base models released by Lou et al.
+      <a href="#cite-5" class="citation">[5]</a>, we measure average generated
+      perplexity across different number of timesteps used for inference, as
+      shown in the graph below. We measured results for CSA:
+    </p>
+    <p>
+      <img src="assets/perplexity_by_bs.png" />
+    </p>
+    <p>
+      The three models plotted here are the small model and medium models from
+      Lou et al. <a href="#cite-5" class="citation">[5]</a>, and our best
+      discrete autoguidance model, which uses the score-based autoguidance
+      framework with an
+      <span class="math inline">\(\alpha = 0.25.\)</span> While we
+      <em>do</em> improve over the base models, we do not see nearly as large
+      improvements as Karras et al. <a href="#cite-8" class="citation">[8]</a>.
+      We hypothesize that this is likely due to the fact that both autoguidance
+      and CD are based on the assumption that the smaller model is
+      <em>substantially</em> worse than the larger one. However, the medium
+      model provided for SEDD is 1.7B, and the smaller is 780M, and thus may not
+      exhibit the same level of performance difference that is required for
+      maximal benefit. Since the two models we use are not hugely different in
+      performance, the deltas between them do not give us as much information,
+      resulting in our guidance not yielding the same performance improvements
+      that autoguidance and CD typically see.
+    </p>
+    <p>
+      Our results for SBA are very poor: degenerate outputs (e.g. an output of
+      all exclamation marks, "!!!!!!!!") often occur, and as a whole, the
+      generations have high perplexity values (≥100 with 1,024 sampling steps).
+    </p>
+    <h2 id="comparison-of-different-guidance-strategies">
+      Comparison of different guidance strategies
+    </h2>
+    <p>
+      As discussed earlier, we drew inspiration from two techniques: CD and
+      autoguidance. We find that (perhaps unsurprisingly), the CD-based sampling
+      approach results in extremely poor-quality outputs. There are multiple
+      possible reasons for this: the task at hand is completely different, as
+      diffusion is denoising, whereas contrastive decoding is attempting to
+      greedily find the best next token. This is <em>not</em> what a diffusion
+      processes aims to do, and the inherent greediness of the strategy may be
+      responsible for the poor outputs. Moreover, the strategy hinges on the
+      probability distributions containing valuable information about the
+      desired “direction” to move in in the discrete space—however, at early
+      timesteps, this information is likely not present, also contributing to
+      the poor performance. Thus, it is possible that applying this guidance
+      scheme at a later point in the denoising process could lead to better
+      results—a potential future direction for this work.
+    </p>
+    <h2 id="the-effect-of-hyperparameters-on-discrete-autoguidance">
+      Varying hyperparameters in discrete autoguidance
+    </h2>
+    <p>
+      Given that we found that a autoguidance scheme of taking
+      <span class="math display"
+        >\[s_{\theta}&#39;(x_t, t) = s_{\theta}^{\text{med}}(x_t, t) +
+        \alpha\left(s_{\theta}^{\text{med}}(x_t, t) -
+        s_{\theta}^{\text{small}}(x_t, t)\right)\]</span
+      >
+      to be optimal, we then conducted a hyperparameter search to measure the
+      effect of <span class="math inline">\(\alpha\)</span> on model
+      performance. To do so, we measured average perplexity across 1,024 samples
+      (of sequence length 256, generated with 64 timesteps) for
+      <span class="math inline"
+        >\(\alpha=0.1, 0.2, 0.25, 0.3, 0.5, 1.0, 2.5,\)</span
+      >
+      as seen in the following graph:
+    </p>
+    <p>
+      <img src="assets/perplexity_by_alpha.png" />
+    </p>
+    <p>
+      As indicated, we found that an
+      <span class="math inline">\(\alpha = 0.25\)</span> proved to be optimal.
+      Interestingly enough, this deviates significantly from both the
+      autoguidance paper, who find optimal values of
+      <span class="math inline">\(\alpha\)</span> to be nearly an order of
+      magnitude higher <em>and</em> literature on classifier-free guidance,
+      which also find that significantly higher levels of guidance are optimal.
+      We hypothesize that there may be several reasons for this: firstly, as
+      discussed before, due to the fact that our “worse” diffusion model is not
+      substantially worse, we may not have as meaningful score differences.
+      Thus, these score differences higher may not extrapolate well when
+      weighted more; thus, emphasizing them with a higher
+      <span class="math inline">\(\alpha\)</span> seems to lead to worse
+      performance than even the base model. A second explanation for the
+      difference in parameter scale is a simpler one: it is due to the fact that
+      the notions of scores here are entirely different. While score for the
+      discrete data we are dealing with is a vector of probability ratios, score
+      in the continuous setting is (cannonically) the gradients of the
+      probability distribution. Thus, it is reasonable for this hyperparameter
+      scale to not transfer over, since we are dealing with entirely different
+      mathematical objects.
+    </p>
+    <h1 id="discussion">Discussion</h1>
+    <p>
+      Our work demonstrates that guidance techniques, particularly concrete
+      score-based autoguidance (CSA), can improve diffusion language models,
+      <em>without additional training</em>. While we observed more modest
+      improvements than those reported in continuous domains, likely due to the
+      relatively small performance gap between our expert and amateur models
+      (780M vs 1.7B parameters), our results suggest that the core intuition
+      behind autoguidance extends effectively to the discrete setting. The poor
+      performance of sampling-based autoguidance (SBA) highlights that not all
+      guidance techniques transfer cleanly between domains. Despite some
+      computational limitations in evaluation, particularly the high variance in
+      ELBO estimates, our findings indicate that guidance techniques represent a
+      promising direction for improving discrete diffusion models and narrowing
+      the performance gap with autoregressive approaches.
+    </p>
+    <h1 id="references">References</h1>
+    <div class="references">
+      <p id="cite-1">
+        [1] J. Ho, A. Jain, and P. Abbeel, "Denoising Diffusion Probabilistic
+        Models," arXiv:2006.11239, 2020.
+      </p>
+
+      <p id="cite-2">
+        [2] J. Ho et al., "Video Diffusion Models," arXiv:2204.03458, 2022.
+      </p>
+
+      <p id="cite-3">
+        [3] Z. Evans, C. Carr, J. Taylor, S. H. Hawley, and J. Pons, "Fast
+        Timing-Conditioned Latent Audio Diffusion," arXiv:2402.04825, 2024.
+      </p>
+
+      <p id="cite-4">
+        [4] A. Holtzman, J. Buys, L. Du, M. Forbes, and Y. Choi, "The Curious
+        Case of Neural Text Degeneration," arXiv:1904.09751, 2020.
+      </p>
+
+      <p id="cite-5">
+        [5] A. Lou, C. Meng, and S. Ermon, "Discrete Diffusion Modeling by
+        Estimating the Ratios of the Data Distribution," arXiv:2310.16834, 2024.
+      </p>
+
+      <p id="cite-6">
+        [6] S. S. Sahoo et al., "Simple and Effective Masked Diffusion Language
+        Models," arXiv:2406.07524, 2024.
+      </p>
+
+      <p id="cite-7">
+        [7] X. L. Li et al., "Contrastive Decoding: Open-ended Text Generation
+        as Optimization," arXiv:2210.15097, 2023.
+      </p>
+
+      <p id="cite-8">
+        [8] T. Karras et al., "Guiding a Diffusion Model with a Bad Version of
+        Itself," arXiv:2406.02507, 2024.
+      </p>
+
+      <p id="cite-9">
+        [9] J. Sohl-Dickstein, E. A. Weiss, N. Maheswaranathan, and S. Ganguli,
+        "Deep Unsupervised Learning using Nonequilibrium Thermodynamics,"
+        arXiv:1503.03585, 2015.
+      </p>
+
+      <p id="cite-10">
+        [10] Y. Song et al., "Score-Based Generative Modeling through Stochastic
+        Differential Equations," arXiv:2011.13456, 2021.
+      </p>
+
+      <p id="cite-11">
+        [11] S. Liu et al., "Think While You Generate: Discrete Diffusion with
+        Planned Denoising," arXiv:2410.06264, 2024.
+      </p>
+
+      <p id="cite-12">
+        [12] Y. Song and S. Ermon, "Generative Modeling by Estimating Gradients
+        of the Data Distribution," arXiv:1907.05600, 2020.
+      </p>
+
+      <p id="cite-13">
+        [13] J. Ho and T. Salimans, "Classifier-Free Diffusion Guidance,"
+        arXiv:2207.12598, 2022.
+      </p>
+    </div>
+  </body>
+</html>
