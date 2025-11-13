@@ -9,9 +9,8 @@ export default function Home() {
       <div className="flex flex-col">
         <div className="flex w-full flex-col space-y-4 mb-12 leading-relaxed">
           <div>
-            Hi! I&apos;m Albert, a senior studying Computer Science and
-            Mathematics at MIT. Right now, I&apos;m training agents for coding
-            at{" "}
+            Hi! I&apos;m Albert, a senior studying Computer Science at MIT.
+            Right now, I&apos;m training agents for coding at{" "}
             <a
               href="https://cognition.ai/"
               className="text-blue-700 hover:text-blue-900"
