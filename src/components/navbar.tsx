@@ -18,7 +18,9 @@ export default function Navbar() {
   const pathName = usePathname();
   return (
     <div className="flex items-center md:w-1/2 w-full">
-      <div className="grow md:text-4xl text-xl">Albert Tam</div>
+      <div className="grow md:text-4xl text-xl">
+        <Link href="/">Albert Tam</Link>
+      </div>
       <div className="flex items-center space-x-4 text-gray-400">
         {navbarItems.map(({ href, label }) => {
           const isActive = pathName === href;
