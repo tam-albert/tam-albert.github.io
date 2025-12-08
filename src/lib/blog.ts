@@ -11,6 +11,7 @@ export interface BlogPost {
   title: string;
   date: string;
   excerpt: string;
+  tags?: string[];
   content?: string;
 }
 
@@ -18,6 +19,7 @@ export interface BlogPostData {
   title: string;
   date: string;
   excerpt: string;
+  tags?: string[];
 }
 
 export function getSortedPostsData(): BlogPost[] {
@@ -42,6 +44,7 @@ export function getSortedPostsData(): BlogPost[] {
         title: matterResult.data.title || '',
         date: matterResult.data.date || '',
         excerpt: matterResult.data.excerpt || '',
+        tags: matterResult.data.tags || [],
       };
     });
 
@@ -87,6 +90,20 @@ export async function getPostData(slug: string): Promise<BlogPost> {
     title: matterResult.data.title || '',
     date: matterResult.data.date || '',
     excerpt: matterResult.data.excerpt || '',
+    tags: matterResult.data.tags || [],
     content: contentHtml,
   };
+}
+
+export function getAllTags(): string[] {
+  const allPosts = getSortedPostsData();
+  const tagsSet = new Set<string>();
+
+  allPosts.forEach(post => {
+    if (post.tags) {
+      post.tags.forEach(tag => tagsSet.add(tag));
+    }
+  });
+
+  return Array.from(tagsSet).sort();
 }

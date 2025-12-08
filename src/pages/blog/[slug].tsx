@@ -38,13 +38,27 @@ export default function Post({ postData }: PostProps) {
         <article className="space-y-6">
           <header className="space-y-4">
             <h1 className="text-4xl font-bold">{postData.title}</h1>
-            <time className="text-gray-600 block">
-              {new Date(postData.date).toLocaleDateString('en-US', {
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-              })}
-            </time>
+            <div className="flex items-center gap-4 flex-wrap">
+              <time className="text-gray-600">
+                {new Date(postData.date).toLocaleDateString('en-US', {
+                  year: 'numeric',
+                  month: 'long',
+                  day: 'numeric',
+                })}
+              </time>
+              {postData.tags && postData.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {postData.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </div>
           </header>
 
           <div
