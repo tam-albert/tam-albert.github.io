@@ -1,9 +1,8 @@
 ---
-title: DeepSeekMath-V2
-date: 2025-12-07
-excerpt: https://arxiv.org/pdf/2511.22570v1
-tags:
-  - paper-notes
+title: "DeepSeekMath-V2"
+date: "2025-12-07"
+excerpt: "https://arxiv.org/pdf/2511.22570v1"
+tags: ["paper-notes"]
 ---
 Paper came out **Nov 2025.**
 ## Takeaways
@@ -82,7 +81,7 @@ With this, they can train as follows:
 
 They note that after enough generator-verifier training loops, they no longer need to use human judgments by the end (pretty cool!).
 
-(note: doesn't this just mean that their iterative improvement scheme has saturated? this could just mean that you reached an equilibrium where the )
+(note: doesn't this just mean that their iterative improvement scheme has saturated? this could just mean that you reached an equilibrium where the generator stops producing challenging proofs, since its training has saturated)
 ## Results
 - In the one-shot proof generation setting, they outperform Gemini 2.5 Deep Think and GPT-5 (high) on some Chinese olympiad problems. (Fig. 1)
 - In the iterative refinement setting (where they use the self-analysis output by the generator to improve the next proof), proof score indeed scales with # of refinement steps on IMO shortlist problems. (Fig. 2)
