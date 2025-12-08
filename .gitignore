@@ -38,3 +38,6 @@ next-env.d.ts
 # keys
 gh-pages
 gh-pages.pub
+
+# obsidian
+**/.obsidian
