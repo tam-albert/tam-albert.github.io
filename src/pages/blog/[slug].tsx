@@ -30,15 +30,15 @@ export default function Post({ postData }: PostProps) {
       <div className="max-w-3xl">
         <Link
           href="/blog"
-          className="text-gray-700 hover:text-black transition-colors mb-8 inline-block"
+          className="text-gray-700 hover:text-black transition-colors mb-4 inline-block"
         >
           &larr; Back to blog
         </Link>
 
-        <article className="space-y-6">
-          <header className="space-y-4">
-            <h1 className="text-4xl font-bold">{postData.title}</h1>
-            <div className="flex items-center gap-4 flex-wrap">
+        <article className="space-y-2">
+          <header className="space-y-1">
+            <h1 className="text-3xl font-bold">{postData.title}</h1>
+            <div className="flex items-center gap-2 flex-wrap">
               <time className="text-gray-600">
                 {new Date(postData.date).toLocaleDateString('en-US', {
                   year: 'numeric',
@@ -62,7 +62,7 @@ export default function Post({ postData }: PostProps) {
           </header>
 
           <div
-            className="prose prose-lg max-w-none prose-headings:text-black prose-p:text-gray-800 prose-a:text-blue-700 hover:prose-a:text-blue-900 prose-strong:text-black prose-ul:text-gray-800 prose-ol:text-gray-800"
+            className="prose prose-sm max-w-none prose-headings:text-black prose-p:text-gray-800 prose-p:my-2 prose-p:leading-snug prose-headings:mt-4 prose-headings:mb-2 prose-a:text-blue-700 hover:prose-a:text-blue-900 prose-strong:text-black prose-ul:text-gray-800 prose-ol:text-gray-800 prose-ul:my-2 prose-ol:my-2 prose-li:my-0"
             dangerouslySetInnerHTML={{ __html: postData.content || '' }}
           />
         </article>
