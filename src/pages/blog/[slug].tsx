@@ -30,16 +30,17 @@ export default function Post({ postData }: PostProps) {
       <div className="max-w-3xl">
         <Link
           href="/blog"
-          className="text-gray-700 hover:text-black transition-colors mb-8 inline-block"
+          className="text-gray-500 hover:text-black transition-colors mb-10 inline-flex items-center gap-2 text-sm group"
         >
-          &larr; Back to blog
+          <span className="group-hover:-translate-x-1 transition-transform duration-200">&larr;</span>
+          Back to blog
         </Link>
 
-        <article className="space-y-6">
-          <header className="space-y-4">
-            <h1 className="text-4xl font-bold">{postData.title}</h1>
-            <div className="flex items-center gap-4 flex-wrap">
-              <time className="text-gray-600">
+        <article className="space-y-10">
+          <header className="space-y-6">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight">{postData.title}</h1>
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4 text-gray-500">
+              <time className="font-mono text-sm">
                 {new Date(postData.date).toLocaleDateString('en-US', {
                   year: 'numeric',
                   month: 'long',
@@ -47,22 +48,25 @@ export default function Post({ postData }: PostProps) {
                 })}
               </time>
               {postData.tags && postData.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {postData.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded"
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+                <>
+                  <span className="hidden sm:inline text-gray-300">&bull;</span>
+                  <div className="flex flex-wrap gap-3">
+                    {postData.tags.map((tag) => (
+                      <span
+                        key={tag}
+                        className="text-sm text-gray-500 font-mono"
+                      >
+                        #{tag}
+                      </span>
+                    ))}
+                  </div>
+                </>
               )}
             </div>
           </header>
 
           <div
-            className="prose prose-lg max-w-none prose-headings:text-black prose-p:text-gray-800 prose-a:text-blue-700 hover:prose-a:text-blue-900 prose-strong:text-black prose-ul:text-gray-800 prose-ol:text-gray-800"
+            className="prose prose-lg max-w-none prose-headings:font-semibold prose-headings:text-black prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-black prose-a:underline prose-a:underline-offset-4 hover:prose-a:text-gray-600 prose-strong:text-black prose-ul:text-gray-600 prose-ol:text-gray-600"
             dangerouslySetInnerHTML={{ __html: postData.content || '' }}
           />
         </article>

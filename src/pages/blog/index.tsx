@@ -35,17 +35,17 @@ export default function Blog({ allPostsData, allTags }: BlogProps) {
       <div className="space-y-8">
         <div>
           <h1 className="text-4xl font-bold mb-2">Blog</h1>
-          <p className="text-gray-700">Work in progress...</p>
+          <p className="text-gray-500">Thoughts, tutorials, and updates.</p>
         </div>
 
         {allTags.length > 0 && (
           <div className="flex flex-wrap gap-2">
             <button
               onClick={() => setSelectedTag(null)}
-              className={`px-3 py-1 rounded-full text-sm transition-colors ${
+              className={`px-3 py-1 rounded-full text-sm transition-all duration-200 ${
                 selectedTag === null
                   ? 'bg-black text-white'
-                  : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+                  : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
               }`}
             >
               All
@@ -54,10 +54,10 @@ export default function Blog({ allPostsData, allTags }: BlogProps) {
               <button
                 key={tag}
                 onClick={() => setSelectedTag(tag)}
-                className={`px-3 py-1 rounded-full text-sm transition-colors ${
+                className={`px-3 py-1 rounded-full text-sm transition-all duration-200 ${
                   selectedTag === tag
                     ? 'bg-black text-white'
-                    : 'bg-gray-200 text-gray-800 hover:bg-gray-300'
+                    : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
                 }`}
               >
                 {tag}
@@ -66,33 +66,35 @@ export default function Blog({ allPostsData, allTags }: BlogProps) {
           </div>
         )}
 
-        <div className="space-y-6">
+        <div className="space-y-10">
           {filteredPosts.map((post) => (
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
               className="block group"
             >
-              <article className="border border-gray-300 rounded-lg p-6 hover:border-gray-400 transition-colors">
-                <h2 className="text-2xl font-bold mb-2 group-hover:text-blue-700 transition-colors">
-                  {post.title}
-                </h2>
-                <time className="text-sm text-gray-600 mb-3 block">
-                  {new Date(post.date).toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                  })}
-                </time>
-                <p className="text-gray-800 mb-3">{post.excerpt}</p>
+              <article className="space-y-2">
+                <div className="flex flex-col sm:flex-row sm:items-baseline sm:justify-between gap-1">
+                  <h2 className="text-2xl font-semibold group-hover:text-gray-600 transition-colors">
+                    {post.title}
+                  </h2>
+                  <time className="text-sm text-gray-400 font-mono shrink-0">
+                    {new Date(post.date).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric',
+                    })}
+                  </time>
+                </div>
+                <p className="text-gray-600 leading-relaxed">{post.excerpt}</p>
                 {post.tags && post.tags.length > 0 && (
-                  <div className="flex flex-wrap gap-2">
+                  <div className="flex flex-wrap gap-2 pt-1">
                     {post.tags.map((tag) => (
                       <span
                         key={tag}
-                        className="px-2 py-1 bg-gray-100 text-gray-700 text-xs rounded"
+                        className="text-xs text-gray-400 font-mono"
                       >
-                        {tag}
+                        #{tag}
                       </span>
                     ))}
                   </div>
