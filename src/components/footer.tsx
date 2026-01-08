@@ -22,24 +22,17 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="flex space-x-2">
+    <footer className="flex space-x-6">
       {links.map(({ Icon, link }) => (
-        <button
+        <a
           key={link}
-          className="
-            flex justify-center items-center
-            border border-slate-300/50 rounded-md
-            transition hover:bg-slate-200/25"
+          href={link}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-gray-400 hover:text-black transition-colors"
         >
-          <a
-            href={link}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2.5"
-          >
-            <Icon />
-          </a>
-        </button>
+          <Icon className="w-5 h-5" />
+        </a>
       ))}
     </footer>
   );

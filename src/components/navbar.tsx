@@ -17,23 +17,21 @@ export default function Navbar() {
     },
   ];
 
-  const activeClassNames = "text-black active";
-
   const pathName = usePathname();
   return (
-    <div className="flex items-center md:w-1/2 w-full">
-      <div className="grow md:text-4xl text-xl">
+    <div className="flex flex-col space-y-6 w-full max-w-2xl">
+      <div className="text-3xl font-bold tracking-tight text-black">
         <Link href="/">Albert Tam</Link>
       </div>
-      <div className="flex items-center space-x-4 text-gray-400">
+      <div className="flex items-center space-x-6 text-sm font-medium text-gray-500">
         {navbarItems.map(({ href, label }) => {
           const isActive = pathName === href;
           return (
             <div
               key="label"
               className={`${
-                isActive ? activeClassNames : "inactive"
-              } custom-underline`}
+                isActive ? "text-black font-semibold" : "hover:text-black transition-colors"
+              }`}
             >
               <Link href={href}>{label}</Link>
             </div>

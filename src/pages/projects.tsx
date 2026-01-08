@@ -4,7 +4,6 @@ import { Space_Mono } from "next/font/google";
 import { FaFileAlt, FaGithub } from "react-icons/fa";
 import { FaCircleInfo } from "react-icons/fa6";
 import { SiDevpost } from "react-icons/si";
-import { motion } from "framer-motion";
 
 const mono = Space_Mono({ subsets: ["latin"], weight: "700" });
 
@@ -22,7 +21,7 @@ export default function Projects() {
             models. By extending{" "}
             <a
               href="https://trak.csail.mit.edu/"
-              className="text-blue-700 hover:text-blue-900"
+              className="text-black underline underline-offset-4 hover:text-gray-600 transition-colors"
               target="_blank"
             >
               TRAK
@@ -30,7 +29,7 @@ export default function Projects() {
             , we can curate a subset of training images from{" "}
             <a
               href="https://cocodataset.org/#home"
-              className="text-blue-700 hover:text-blue-900"
+              className="text-black underline underline-offset-4 hover:text-gray-600 transition-colors"
               target="_blank"
             >
               large image datasets
@@ -56,7 +55,7 @@ export default function Projects() {
           Final project for{" "}
           <a
             href="https://hanlab.mit.edu/courses/2024-fall-65940"
-            className="text-blue-700 hover:text-blue-900"
+            className="text-black underline underline-offset-4 hover:text-gray-600 transition-colors"
             target="_blank"
           >
             6.5940 (Efficient Deep Learning Computing)
@@ -64,7 +63,7 @@ export default function Projects() {
           , Fall 2024 at MIT. We adapted{" "}
           <a
             href="https://arxiv.org/abs/2410.09426"
-            className="text-blue-700 hover:text-blue-900"
+            className="text-black underline underline-offset-4 hover:text-gray-600 transition-colors"
             target="_blank"
           >
             FlatQuant
@@ -85,7 +84,7 @@ export default function Projects() {
           Final project for{" "}
           <a
             href="https://phillipi.github.io/6.7960/"
-            className="text-blue-700 hover:text-blue-900"
+            className="text-black underline underline-offset-4 hover:text-gray-600 transition-colors"
             target="_blank"
           >
             6.7960 (Deep Learning)
@@ -95,7 +94,7 @@ export default function Projects() {
           (
           <a
             href="https://arxiv.org/abs/2406.02507"
-            className="text-blue-700 hover:text-blue-900"
+            className="text-black underline underline-offset-4 hover:text-gray-600 transition-colors"
             target="_blank"
           >
             autoguidance
@@ -103,7 +102,7 @@ export default function Projects() {
           ) and language modeling (
           <a
             href="https://arxiv.org/abs/2210.15097"
-            className="text-blue-700 hover:text-blue-900"
+            className="text-black underline underline-offset-4 hover:text-gray-600 transition-colors"
             target="_blank"
           >
             contrastive decoding
@@ -141,42 +140,23 @@ export default function Projects() {
       text: "A collaborative journaling app you can use to compile memories with your friends, supporting text, images, and audio. Built for web.lab 2023.",
     },
   ];
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.15,
-      },
-    },
-  };
-
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut",
-      },
-    },
-  };
 
   return (
     <Layout>
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="flex flex-col space-y-6"
-      >
-        {projects.map((project, index) => (
-          <motion.div key={`project-${index}`} variants={itemVariants}>
-            <Project {...project} />
-          </motion.div>
-        ))}
-      </motion.div>
+      <div className="flex flex-col space-y-8">
+        <div className="space-y-1">
+          <h1 className="text-3xl font-bold tracking-tight text-black">Projects</h1>
+          <p className="text-gray-500">Selected work and experiments.</p>
+        </div>
+        
+        <div className="flex flex-col space-y-10">
+          {projects.map((project, index) => (
+            <div key={`project-${index}`}>
+              <Project {...project} />
+            </div>
+          ))}
+        </div>
+      </div>
     </Layout>
   );
 }

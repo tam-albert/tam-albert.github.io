@@ -1,22 +1,23 @@
 import Navbar from "@/components/navbar";
 import "@/styles/globals.css";
-import { AnimatePresence } from "framer-motion";
 import type { AppProps } from "next/app";
 import { DM_Sans } from "next/font/google";
-import { usePathname } from "next/navigation";
+import Footer from "@/components/footer";
 
 const dmSans = DM_Sans({ subsets: ["latin"] });
 
 export default function App({ Component, pageProps }: AppProps) {
-  const pathName = usePathname();
   return (
     <main
-      className={`flex min-h-screen flex-col items-center justify-between space-y-16 py-16 px-12 ${dmSans.className}`}
+      className={`flex min-h-screen flex-col items-start justify-between space-y-16 py-20 px-8 sm:px-20 ${dmSans.className}`}
     >
       <Navbar />
-      <AnimatePresence mode="wait" initial={false}>
-        <Component {...pageProps} key={pathName} />
-      </AnimatePresence>
+      <div className="w-full max-w-2xl flex-grow flex flex-col">
+        <Component {...pageProps} />
+      </div>
+      <div className="w-full max-w-2xl">
+        <Footer />
+      </div>
     </main>
   );
 }

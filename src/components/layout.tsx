@@ -1,5 +1,4 @@
 import { ReactNode } from "react";
-import { motion } from "framer-motion";
 
 interface Props {
   children?: ReactNode;
@@ -7,18 +6,8 @@ interface Props {
 
 export default function Layout({ children }: Props) {
   return (
-    <motion.div
-      initial={{ y: 100, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      exit={{ y: 100, opacity: 0 }}
-      transition={{
-        type: "spring",
-        duration: 0.3,
-        bounce: 0.05,
-      }}
-      className="md:w-1/2 grow"
-    >
+    <div className="w-full">
       {children}
-    </motion.div>
+    </div>
   );
 }
