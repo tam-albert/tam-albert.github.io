@@ -19,8 +19,8 @@ export default function Navbar() {
 
   const pathName = usePathname();
   return (
-    <div className="flex flex-col space-y-6 w-full max-w-2xl">
-      <div className="text-3xl font-bold tracking-tight text-black">
+    <div className="flex items-center justify-between w-full max-w-2xl">
+      <div className="text-2xl font-bold tracking-tight text-black">
         <Link href="/">Albert Tam</Link>
       </div>
       <div className="flex items-center space-x-6 text-sm font-medium text-gray-500">

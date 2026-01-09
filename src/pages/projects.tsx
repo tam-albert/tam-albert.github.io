@@ -143,11 +143,8 @@ export default function Projects() {
 
   return (
     <Layout>
-      <div className="flex flex-col space-y-8">
-        <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight text-black">Projects</h1>
-          <p className="text-gray-500">Selected work and experiments.</p>
-        </div>
+      <div className="flex flex-col space-y-12">
+        <h1 className="text-lg font-bold tracking-tight text-black">Projects</h1>
         
         <div className="flex flex-col space-y-10">
           {projects.map((project, index) => (

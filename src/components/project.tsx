@@ -14,12 +14,12 @@ interface ProjectProps {
 
 export default function Project({ title, links, text }: ProjectProps) {
   return (
-    <div className="group flex flex-col space-y-2">
-      <div className="flex items-start justify-between gap-4">
-        <div className="text-lg font-semibold text-black leading-snug">
+    <div className="group flex flex-col space-y-1">
+      <div className="flex items-center justify-between gap-4">
+        <div className="text-base font-medium text-black">
           {title}
         </div>
-        <div className="flex items-center gap-3 flex-shrink-0 pt-1">
+        <div className="flex items-center gap-3 flex-shrink-0">
           {links.map(({ Icon, link }) => (
             <a
               href={link}

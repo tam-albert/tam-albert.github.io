@@ -9,7 +9,7 @@ const dmSans = DM_Sans({ subsets: ["latin"] });
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <main
-      className={`flex min-h-screen flex-col items-start justify-between space-y-16 py-20 px-8 sm:px-20 ${dmSans.className}`}
+      className={`flex min-h-screen flex-col items-center justify-between space-y-12 py-12 px-6 sm:px-12 ${dmSans.className}`}
     >
       <Navbar />
       <div className="w-full max-w-2xl flex-grow flex flex-col">
