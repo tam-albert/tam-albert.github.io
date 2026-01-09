@@ -4,11 +4,13 @@ export default function Home() {
   return (
     <Layout>
       <div className="flex flex-col space-y-12">
-        <div className="text-lg text-gray-600 leading-relaxed">
+        <div className="text-lg text-gray-800 leading-relaxed">
           <p className="mb-6">
-            Hi! I&apos;m <span className="font-semibold text-black">Albert</span>, a senior studying Computer Science at MIT.
+            Hi! I&apos;m{" "}
+            <span className="font-semibold text-black">Albert</span>, a senior
+            studying Computer Science at MIT.
           </p>
-          <p>
+          <p className="mb-6">
             Right now, I&apos;m training agents for coding at{" "}
             <a
               href="https://cognition.ai/"
@@ -38,11 +40,9 @@ export default function Home() {
             </a>
             .
           </p>
-        </div>
-
-        <div className="space-y-8 text-gray-600 leading-relaxed">
-          <p>
-            Previously, I researched data attribution for segmentation models with{" "}
+          <p className="mb-6">
+            Previously, I researched data attribution for segmentation models
+            with{" "}
             <a
               href="https://madrylab.mit.edu/"
               className="text-black decoration-1 underline-offset-4 hover:underline transition-all"
@@ -89,8 +89,7 @@ export default function Home() {
             </a>
             .
           </p>
-
-          <p>
+          <p className="mb-6">
             I also led the organizing team for{" "}
             <a
               href="https://hackmit.org/"
@@ -99,8 +98,8 @@ export default function Home() {
               rel="noopener noreferrer"
             >
               HackMIT
-            </a>
-            {" "}and{" "}
+            </a>{" "}
+            and{" "}
             <a
               href="https://blueprint.hackmit.org/"
               className="text-black decoration-1 underline-offset-4 hover:underline transition-all"

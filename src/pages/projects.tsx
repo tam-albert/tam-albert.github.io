@@ -21,7 +21,7 @@ export default function Projects() {
             models. By extending{" "}
             <a
               href="https://trak.csail.mit.edu/"
-              className="text-black underline underline-offset-4 hover:text-gray-600 transition-colors"
+              className="text-black underline underline-offset-4 hover:text-gray-800 transition-colors"
               target="_blank"
             >
               TRAK
@@ -29,7 +29,7 @@ export default function Projects() {
             , we can curate a subset of training images from{" "}
             <a
               href="https://cocodataset.org/#home"
-              className="text-black underline underline-offset-4 hover:text-gray-600 transition-colors"
+              className="text-black underline underline-offset-4 hover:text-gray-800 transition-colors"
               target="_blank"
             >
               large image datasets
@@ -55,7 +55,7 @@ export default function Projects() {
           Final project for{" "}
           <a
             href="https://hanlab.mit.edu/courses/2024-fall-65940"
-            className="text-black underline underline-offset-4 hover:text-gray-600 transition-colors"
+            className="text-black underline underline-offset-4 hover:text-gray-800 transition-colors"
             target="_blank"
           >
             6.5940 (Efficient Deep Learning Computing)
@@ -63,7 +63,7 @@ export default function Projects() {
           , Fall 2024 at MIT. We adapted{" "}
           <a
             href="https://arxiv.org/abs/2410.09426"
-            className="text-black underline underline-offset-4 hover:text-gray-600 transition-colors"
+            className="text-black underline underline-offset-4 hover:text-gray-800 transition-colors"
             target="_blank"
           >
             FlatQuant
@@ -84,7 +84,7 @@ export default function Projects() {
           Final project for{" "}
           <a
             href="https://phillipi.github.io/6.7960/"
-            className="text-black underline underline-offset-4 hover:text-gray-600 transition-colors"
+            className="text-black underline underline-offset-4 hover:text-gray-800 transition-colors"
             target="_blank"
           >
             6.7960 (Deep Learning)
@@ -94,7 +94,7 @@ export default function Projects() {
           (
           <a
             href="https://arxiv.org/abs/2406.02507"
-            className="text-black underline underline-offset-4 hover:text-gray-600 transition-colors"
+            className="text-black underline underline-offset-4 hover:text-gray-800 transition-colors"
             target="_blank"
           >
             autoguidance
@@ -102,7 +102,7 @@ export default function Projects() {
           ) and language modeling (
           <a
             href="https://arxiv.org/abs/2210.15097"
-            className="text-black underline underline-offset-4 hover:text-gray-600 transition-colors"
+            className="text-black underline underline-offset-4 hover:text-gray-800 transition-colors"
             target="_blank"
           >
             contrastive decoding
@@ -144,8 +144,6 @@ export default function Projects() {
   return (
     <Layout>
       <div className="flex flex-col space-y-12">
-        <h1 className="text-lg font-bold tracking-tight text-black">Projects</h1>
-        
         <div className="flex flex-col space-y-10">
           {projects.map((project, index) => (
             <div key={`project-${index}`}>

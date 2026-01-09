@@ -16,9 +16,7 @@ export default function Project({ title, links, text }: ProjectProps) {
   return (
     <div className="group flex flex-col space-y-1">
       <div className="flex items-center justify-between gap-4">
-        <div className="text-base font-medium text-black">
-          {title}
-        </div>
+        <div className="text-base font-medium text-black">{title}</div>
         <div className="flex items-center gap-3 flex-shrink-0">
           {links.map(({ Icon, link }) => (
             <a
@@ -33,7 +31,7 @@ export default function Project({ title, links, text }: ProjectProps) {
           ))}
         </div>
       </div>
-      <div className="text-gray-600 leading-relaxed text-sm">{text}</div>
+      <div className="text-gray-800 leading-relaxed text-sm">{text}</div>
     </div>
   );
 }

@@ -1,29 +1,55 @@
-import Layout from '../../components/layout';
-import { getSortedPostsData, BlogPost } from '../../lib/blog';
-import Link from 'next/link';
-import { GetStaticProps } from 'next';
+import Layout from "../../components/layout";
+import { getSortedPostsData, getAllTags, BlogPost } from "../../lib/blog";
+import Link from "next/link";
+import { GetStaticProps } from "next";
+import { useState } from "react";
 
 interface BlogProps {
   allPostsData: BlogPost[];
+  allTags: string[];
 }
 
 export const getStaticProps: GetStaticProps = async () => {
   const allPostsData = getSortedPostsData();
+  const allTags = getAllTags();
   return {
     props: {
       allPostsData,
+      allTags,
     },
   };
 };
 
-export default function Blog({ allPostsData }: BlogProps) {
+export default function Blog({ allPostsData, allTags }: BlogProps) {
+  const [selectedTag, setSelectedTag] = useState<string | null>(null);
+
+  const filteredPosts = selectedTag
+    ? allPostsData.filter((post) => post.tags && post.tags.includes(selectedTag))
+    : allPostsData;
+
   return (
     <Layout>
       <div className="flex flex-col space-y-12">
-        <h1 className="text-lg font-bold tracking-tight text-black">Blog</h1>
+        {allTags.length > 0 && (
+          <div className="flex flex-wrap gap-2">
+            {allTags.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => setSelectedTag(selectedTag === tag ? null : tag)}
+                className={`px-3 py-1 text-sm rounded-full transition-colors ${
+                  selectedTag === tag
+                    ? "bg-gray-900 text-white"
+                    : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+                }`}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        )}
 
         <div className="flex flex-col space-y-6">
-          {allPostsData.map((post) => (
+          {filteredPosts.map((post) => (
             <Link
               key={post.slug}
               href={`/blog/${post.slug}`}
