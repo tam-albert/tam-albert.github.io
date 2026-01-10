@@ -14,7 +14,7 @@ export default function Home() {
             Right now, I&apos;m training agents for coding at{" "}
             <a
               href="https://cognition.ai/"
-              className="text-black decoration-1 underline-offset-4 hover:underline transition-all"
+              className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -23,7 +23,7 @@ export default function Home() {
             , where I&apos;ve worked on the launches of{" "}
             <a
               href="https://cognition.ai/blog/swe-grep"
-              className="text-black decoration-1 underline-offset-4 hover:underline transition-all"
+              className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -32,7 +32,7 @@ export default function Home() {
             and{" "}
             <a
               href="https://cognition.ai/blog/swe-1.5"
-              className="text-black decoration-1 underline-offset-4 hover:underline transition-all"
+              className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -45,7 +45,7 @@ export default function Home() {
             with{" "}
             <a
               href="https://madrylab.mit.edu/"
-              className="text-black decoration-1 underline-offset-4 hover:underline transition-all"
+              className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -54,7 +54,7 @@ export default function Home() {
             at CSAIL. I also worked on post-training voice models at{" "}
             <a
               href="https://phonic.co/"
-              className="text-black decoration-1 underline-offset-4 hover:underline transition-all"
+              className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -63,7 +63,7 @@ export default function Home() {
             , image-to-video models at{" "}
             <a
               href="https://pika.art/"
-              className="text-black decoration-1 underline-offset-4 hover:underline transition-all"
+              className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -72,7 +72,7 @@ export default function Home() {
             , quantitative research at{" "}
             <a
               href="https://www.hudsonrivertrading.com/"
-              className="text-black decoration-1 underline-offset-4 hover:underline transition-all"
+              className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -81,7 +81,7 @@ export default function Home() {
             , and RAG systems at{" "}
             <a
               href="https://inkeep.com/"
-              className="text-black decoration-1 underline-offset-4 hover:underline transition-all"
+              className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -93,7 +93,7 @@ export default function Home() {
             I also led the organizing team for{" "}
             <a
               href="https://hackmit.org/"
-              className="text-black decoration-1 underline-offset-4 hover:underline transition-all"
+              className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -102,7 +102,7 @@ export default function Home() {
             and{" "}
             <a
               href="https://blueprint.hackmit.org/"
-              className="text-black decoration-1 underline-offset-4 hover:underline transition-all"
+              className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
               target="_blank"
               rel="noopener noreferrer"
             >
