@@ -16,7 +16,7 @@ Paper came out **Nov 2025.**
 	- Google and OpenAI did this and got gold medals at the 2025 IMO.
 	- This is DeepSeek's attempt to do that.
 - Beyond training models to be able to generate natural-language proofs (a new class of problems), they notice that some models—despite getting the final answer correct—may generate flawed proofs.
-	- I didn’t know this was happening but apparently happens even with [IMO-Gold models.](https://epoch.ai/blog/deep-think-math#deep-think-did-well-on-the-2025-imo-but-failed-to-solve-two-older-imo-problems-requiring-more-creative-and-intricate-proofs)
+	- (example: this happens even with [IMO-Gold models,](https://epoch.ai/blog/deep-think-math#deep-think-did-well-on-the-2025-imo-but-failed-to-solve-two-older-imo-problems-requiring-more-creative-and-intricate-proofs) especially when the space of "feasible" answers is small)
 
 DeepSeek plans to solve this by training LLMs to verify natural-language math proofs, without access to reference solutions. This is feasible, because humans can verify without rubrics or reference solutions. And with a good verifier, you can train proof generators to verify their own proofs and then refine them.
 ## Cold-start training
