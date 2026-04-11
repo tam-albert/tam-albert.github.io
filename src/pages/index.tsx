@@ -7,8 +7,8 @@ export default function Home() {
         <div className="text-lg text-gray-800 leading-relaxed">
           <p className="mb-6">
             Hi! I&apos;m{" "}
-            <span className="font-semibold text-black">Albert</span>. I&apos;m
-            currently working on post-training at{" "}
+            <span className="font-semibold text-black">Albert</span>, and
+            I&apos;m currently working on post-training at{" "}
             <a
               href="https://openai.com/"
               className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
@@ -20,17 +20,7 @@ export default function Home() {
             .
           </p>
           <p className="mb-6">
-            Previously, I researched data attribution for segmentation models
-            with{" "}
-            <a
-              href="https://madrylab.mit.edu/"
-              className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Aleksander Mądry&apos;s group
-            </a>{" "}
-            at CSAIL. I also worked on coding models at{" "}
+            Previously, I&apos;ve worked on coding models at{" "}
             <a
               href="https://cognition.ai/"
               className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
@@ -66,16 +56,16 @@ export default function Home() {
             >
               HRT
             </a>
-            , and RAG systems at{" "}
+            , and data attribution with{" "}
             <a
-              href="https://inkeep.com/"
+              href="https://madrylab.mit.edu/"
               className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Inkeep
-            </a>
-            .
+              Aleksander Mądry&apos;s group
+            </a>{" "}
+            at CSAIL.
           </p>
           <p className="mb-6">
             I also led the organizing team for{" "}
@@ -95,8 +85,8 @@ export default function Home() {
               rel="noopener noreferrer"
             >
               Blueprint
-            </a>
-            .
+            </a>{" "}
+            while at MIT.
           </p>
         </div>
       </div>
