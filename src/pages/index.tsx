@@ -7,36 +7,15 @@ export default function Home() {
         <div className="text-lg text-gray-800 leading-relaxed">
           <p className="mb-6">
             Hi! I&apos;m{" "}
-            <span className="font-semibold text-black">Albert</span>, a senior
-            studying Computer Science at MIT.
-          </p>
-          <p className="mb-6">
-            Right now, I&apos;m training agents for coding at{" "}
+            <span className="font-semibold text-black">Albert</span>. I&apos;m
+            currently working on post-training at{" "}
             <a
-              href="https://cognition.ai/"
+              href="https://openai.com/"
               className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
               target="_blank"
               rel="noopener noreferrer"
             >
-              Cognition
-            </a>
-            , where I&apos;ve worked on the launches of{" "}
-            <a
-              href="https://cognition.ai/blog/swe-grep"
-              className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              SWE-grep
-            </a>{" "}
-            and{" "}
-            <a
-              href="https://cognition.ai/blog/swe-1.5"
-              className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              SWE-1.5
+              OpenAI
             </a>
             .
           </p>
@@ -51,7 +30,16 @@ export default function Home() {
             >
               Aleksander Mądry&apos;s group
             </a>{" "}
-            at CSAIL. I also worked on post-training voice models at{" "}
+            at CSAIL. I also worked on coding models at{" "}
+            <a
+              href="https://cognition.ai/"
+              className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Cognition
+            </a>
+            , voice models at{" "}
             <a
               href="https://phonic.co/"
               className="text-black underline decoration-dotted decoration-gray-400 underline-offset-4 hover:decoration-black hover:decoration-solid transition-all"
